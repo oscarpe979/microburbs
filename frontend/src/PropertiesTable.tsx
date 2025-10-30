@@ -6,7 +6,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
-import { TableSortLabel, Paper } from '@mui/material';
+import { TableSortLabel, Paper, Modal, Box } from '@mui/material';
 
 // A simple Title component
 function Title(props: React.PropsWithChildren) {
@@ -28,6 +28,7 @@ interface Row {
         bathrooms: number;
         garage_spaces: number;
         land_size: string;
+        description: string;
     };
     listing_date: string;
 }
@@ -122,10 +123,32 @@ function stableSort<T>(array: readonly T[], comparator: (a: T, b: T) => number) 
   return stabilizedThis.map((el) => el[0]);
 }
 
+const style = {
+  position: 'absolute' as 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+  height: '90%',
+  overflow: 'auto',
+};
+
 export default function PropertiesTable({ rows }: PropertiesTableProps) {
   const theme = useTheme();
   const [order, setOrder] = React.useState<Order>('asc');
   const [orderBy, setOrderBy] = React.useState<HeadCell['id']>('price');
+  const [open, setOpen] = React.useState(false);
+  const [selectedRow, setSelectedRow] = React.useState<Row | null>(null);
+
+  const handleOpen = (row: Row) => {
+    setSelectedRow(row);
+    setOpen(true);
+  };
+  const handleClose = () => setOpen(false);
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
@@ -164,9 +187,11 @@ export default function PropertiesTable({ rows }: PropertiesTableProps) {
                 '&:last-child td, &:last-child th': { border: 0 },
                 '&:hover': {
                   backgroundColor: 'rgba(255, 255, 255, 0.04)',
+                  cursor: 'pointer',
                 },
               }}
               hover
+              onClick={() => handleOpen(row)}
             >
               <TableCell>{row.address.street}</TableCell>
               <TableCell align="right">{`$${row.price}`}</TableCell>
@@ -180,6 +205,21 @@ export default function PropertiesTable({ rows }: PropertiesTableProps) {
           ))}
         </TableBody>
       </Table>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            Property Description
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            {selectedRow?.attributes.description}
+          </Typography>
+        </Box>
+      </Modal>
     </Paper>
   );
 }
