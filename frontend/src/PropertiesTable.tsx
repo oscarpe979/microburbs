@@ -138,8 +138,8 @@ const style = {
 };
 
 function formatLandSize(landSize: string): string {
-  if (!landSize || typeof landSize !== 'string') {
-    return '';
+  if (landSize === null || landSize === undefined || landSize === 'None' || typeof landSize !== 'string') {
+    return 'n/a';
   }
   const numericPart = parseFloat(landSize.replace(/[^0-9.]/g, ''));
   if (isNaN(numericPart)) {
@@ -205,11 +205,11 @@ export default function PropertiesTable({ rows }: PropertiesTableProps) {
               onClick={() => handleOpen(row)}
             >
               <TableCell>{row.address.street}</TableCell>
-              <TableCell align="right">{`$${row.price}`}</TableCell>
+              <TableCell align="right">{`${row.price}`}</TableCell>
               <TableCell>{row.property_type}</TableCell>
-              <TableCell align="right">{row.attributes.bedrooms}</TableCell>
-              <TableCell align="right">{row.attributes.bathrooms}</TableCell>
-              <TableCell align="right">{row.attributes.garage_spaces}</TableCell>
+              <TableCell align="right">{row.attributes.bedrooms ?? 'n/a'}</TableCell>
+              <TableCell align="right">{row.attributes.bathrooms ?? 'n/a'}</TableCell>
+              <TableCell align="right">{row.attributes.garage_spaces ?? 'n/a'}</TableCell>
               <TableCell>{formatLandSize(row.attributes.land_size)}</TableCell>
               <TableCell>{row.listing_date}</TableCell>
             </TableRow>
