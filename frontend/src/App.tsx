@@ -1,22 +1,29 @@
 import { useState, useEffect } from 'react';
-import './App.css';
+import { ThemeProvider, CssBaseline, Container } from '@mui/material';
+import theme from './theme';
+import PropertiesTable from './PropertiesTable';
 
 function App() {
-  const [message, setMessage] = useState('');
+  const [data, setData] = useState<{ results: any[] } | null>(null);
 
   useEffect(() => {
     fetch('http://127.0.0.1:8000/')
       .then(response => response.json())
-      .then(data => setMessage(data.Hello));
+      .then(data => setData(data))
+      .catch(error => console.error('Error fetching data:', error));
   }, []);
 
   return (
-    <>
-      <h1>Microburbs Dashboard</h1>
-      <div className="card">
-        <p>{message}</p>
-      </div>
-    </>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+        {data && data.results ? (
+          <PropertiesTable rows={data.results} />
+        ) : (
+          <p>Loading data...</p>
+        )}
+      </Container>
+    </ThemeProvider>
   );
 }
 
