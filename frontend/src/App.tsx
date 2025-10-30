@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ThemeProvider, CssBaseline, Container } from '@mui/material';
+import { ThemeProvider, CssBaseline, Container, GlobalStyles } from '@mui/material';
 import theme from './theme';
 import PropertiesTable from './PropertiesTable';
 
@@ -16,6 +16,7 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
+      <GlobalStyles styles={{ body: { display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' } }} />
       <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
         {data && data.results ? (
           <PropertiesTable rows={data.results} />

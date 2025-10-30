@@ -137,6 +137,17 @@ const style = {
   overflow: 'auto',
 };
 
+function formatLandSize(landSize: string): string {
+  if (!landSize || typeof landSize !== 'string') {
+    return '';
+  }
+  const numericPart = parseFloat(landSize.replace(/[^0-9.]/g, ''));
+  if (isNaN(numericPart)) {
+    return landSize;
+  }
+  return `${Math.ceil(numericPart)} m²`;
+}
+
 export default function PropertiesTable({ rows }: PropertiesTableProps) {
   const theme = useTheme();
   const [order, setOrder] = React.useState<Order>('asc');
@@ -199,7 +210,7 @@ export default function PropertiesTable({ rows }: PropertiesTableProps) {
               <TableCell align="right">{row.attributes.bedrooms}</TableCell>
               <TableCell align="right">{row.attributes.bathrooms}</TableCell>
               <TableCell align="right">{row.attributes.garage_spaces}</TableCell>
-              <TableCell>{row.attributes.land_size}</TableCell>
+              <TableCell>{formatLandSize(row.attributes.land_size)}</TableCell>
               <TableCell>{row.listing_date}</TableCell>
             </TableRow>
           ))}
