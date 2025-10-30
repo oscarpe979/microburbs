@@ -24,14 +24,6 @@
 
 ## Running the application
 
-### Running concurrently
-
-To run both the frontend and backend servers concurrently, run the following command from the root directory:
-
-```bash
-npm run dev:concurrent --prefix frontend
-```
-
 ### Backend
 
 1. Activate the virtual environment:
@@ -50,3 +42,10 @@ npm run dev:concurrent --prefix frontend
    npm run dev --prefix frontend
    ```
 
+### Running concurrently
+
+To run both the frontend and backend servers concurrently, run the following command from the root directory:
+
+```bash
+npm run dev:concurrent --prefix frontend
+```
